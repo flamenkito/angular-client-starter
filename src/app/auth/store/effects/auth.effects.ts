@@ -8,6 +8,8 @@ import { AuthActions } from '../actions';
 import { AuthService, LocalStorageService, AUTH_KEY } from '@app/auth/services';
 import { RouterActions, FooterActions } from '@app/core/store';
 
+import { getError } from '@app/shared/get-error';
+
 @Injectable()
 export class AuthEffects {
   constructor(
@@ -80,7 +82,7 @@ export class AuthEffects {
   operationFailure$ = this.actions$.pipe(
     ofType<AuthActions.OperationFailure>(AuthActions.OPERATION_FAILURE),
     map(action => {
-      const { message } = action.error.error || { message: 'Error' };
+      const message = getError(action.error);
       return new FooterActions.Popup(message);
     })
   );
