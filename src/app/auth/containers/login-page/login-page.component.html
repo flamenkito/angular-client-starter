@@ -1,0 +1,22 @@
+<div class="row login-row">
+  <div class="col-sm-4 offset-sm-4 align-self-center">
+    <div class="card">
+      <div class="card-body">
+        <label for="input-username">
+          Username
+        </label>
+        <input #username id="input-username" type="text" class="form-control mb-2"
+          [value]="form.username">
+        <label for="input-password">
+          Password
+        </label>
+        <input #password id="input-password" type="password" class="form-control mb-2"
+          [value]="form.password">
+        <button class="btn btn-primary btn-block"
+          (click)="onLogin(username.value, password.value)">
+          Login
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="card mb-1">
+  <div class="card-body text-right">
+    <button class="btn btn-primary" (click)="onLogout()">
+      Logout
+    </button>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header sticky-top">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" href="#">Active</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+  </div>
+  <div class="card-body">
+    <div *ngFor="let alert of alerts" class="alert alert-success">
+      {{ alert.text }}
+    </div>
+  </div>
+</div>
