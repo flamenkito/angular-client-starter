@@ -10,12 +10,17 @@ import { containers } from './containers';
 import { reducers, effects, metaReducers } from './store';
 import { interceptors } from './interceptors';
 
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, { metaReducers }),
+    StoreDevtoolsModule.instrument({
+      maxAge: 15
+    }),
     EffectsModule.forRoot(effects)
   ],
   declarations: [...components, ...containers],

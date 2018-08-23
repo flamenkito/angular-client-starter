@@ -23,8 +23,9 @@
     </ul>
   </div>
   <div class="card-body">
-    <div *ngFor="let alert of alerts" class="alert alert-success">
-      {{ alert.text }}
-    </div>
+    <app-docs
+      [docs]="docs$ | async"
+      (select)="onSelectDoc($event)">
+    </app-docs>
   </div>
 </div>

@@ -4,7 +4,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { switchMap, map, catchError, tap, mergeMap } from 'rxjs/operators';
 
-import { AuthActions } from '../actions';
+import { AuthActions, PouchActions } from '../actions';
 import { AuthService, LocalStorageService, AUTH_KEY } from '@app/auth/services';
 import { RouterActions, FooterActions } from '@app/core/store';
 
@@ -23,12 +23,12 @@ export class AuthEffects {
     ofType<AuthActions.LoginUserRequest>(AuthActions.LOGIN_USER_REQUEST),
     switchMap(action => {
       return this.authService.logIn(action.username, action.password).pipe(
-        tap(token =>
+        tap(loginResponse =>
           this.localStorageService.setItem(AUTH_KEY, {
-            token
+            loginResponse
           })
         ),
-        map(token => new AuthActions.LoginUserSuccess(token)),
+        map(loginResponse => new AuthActions.LoginUserSuccess(loginResponse)),
         catchError(err => {
           return of(new AuthActions.OperationFailure(err));
         })
@@ -43,7 +43,7 @@ export class AuthEffects {
       return this.authService.logOut().pipe(
         tap(() =>
           this.localStorageService.setItem(AUTH_KEY, {
-            token: null
+            loginResponse: null
           })
         ),
         map(() => new AuthActions.LogoutUserSuccess()),
@@ -57,7 +57,9 @@ export class AuthEffects {
   @Effect()
   loginUserSuccess$ = this.actions$.pipe(
     ofType<AuthActions.LoginUserSuccess>(AuthActions.LOGIN_USER_SUCCESS),
-    mergeMap(action => [
+    map(action => action.loginResponse),
+    mergeMap(({ token, remoteDbOptions }) => [
+      new PouchActions.Setup(remoteDbOptions),
       new RouterActions.Navigate(['/user']),
       new FooterActions.Popup('Logged in')
     ])

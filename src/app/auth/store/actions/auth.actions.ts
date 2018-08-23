@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
-import { TokenModel } from '../../models';
+
+import { LoginResponse } from '../../models';
 
 export namespace AuthActions {
   export const LOGIN_USER_REQUEST = '[Auth] Login User Request';
@@ -18,7 +19,7 @@ export namespace AuthActions {
   }
   export class LoginUserSuccess implements Action {
     readonly type = LOGIN_USER_SUCCESS;
-    constructor(public readonly token: TokenModel) {}
+    constructor(public readonly loginResponse: LoginResponse) {}
   }
   export class LoginRedirect implements Action {
     readonly type = LOGIN_REDIRECT;

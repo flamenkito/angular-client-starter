@@ -1,10 +1,11 @@
-import { TokenModel, PayloadModel } from '@app/auth/models';
+import { TokenModel, PayloadModel, RemoteDbOptions } from '@app/auth/models';
 import { AuthActions } from '@app/auth/store/actions';
 
 import * as jwt from 'jsonwebtoken';
 
 export interface State {
   token: TokenModel | null;
+  remoteDbOptions: RemoteDbOptions | null;
   payload: PayloadModel | null;
   loaded: boolean;
   loading: boolean;
@@ -13,6 +14,7 @@ export interface State {
 
 export const INITIAL_STATE: State = {
   token: null,
+  remoteDbOptions: null,
   payload: null,
   loaded: false,
   loading: false,
@@ -33,7 +35,7 @@ export function reducer(
     }
 
     case AuthActions.LOGIN_USER_SUCCESS: {
-      const { token } = action;
+      const { token, remoteDbOptions } = action.loginResponse;
       const payload = jwt.decode(token.accessToken) as PayloadModel;
 
       return {
@@ -41,6 +43,7 @@ export function reducer(
         loaded: true,
         loading: false,
         token,
+        remoteDbOptions,
         payload
       };
     }
@@ -55,7 +58,7 @@ export function reducer(
     case AuthActions.LOGOUT_USER_SUCCESS: {
       return INITIAL_STATE;
     }
-  
+
     case AuthActions.OPERATION_FAILURE: {
       return {
         ...state,
@@ -72,6 +75,7 @@ export function reducer(
 }
 
 export const getToken = (state: State) => state.token;
+export const getRemoteDb = (state: State) => state.remoteDbOptions;
 export const getLoaded = (state: State) => state.loaded;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;

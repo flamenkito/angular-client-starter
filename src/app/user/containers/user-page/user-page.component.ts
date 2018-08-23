@@ -1,8 +1,9 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import * as fromAuth from '@app/auth/store';
 import { Store } from '@ngrx/store';
-import { AuthActions } from '@app/auth/store';
+import { AuthActions, PouchActions } from '@app/auth/store';
 
 @Component({
   selector: 'app-user-page',
@@ -11,12 +12,22 @@ import { AuthActions } from '@app/auth/store';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserPageComponent {
-  alerts = [];
+  docs$: Observable<any[]>;
 
   constructor(private readonly store: Store<fromAuth.State>) {
-    for (let i = 0; i++ < 100; ) {
-      this.alerts.push({ text: `Item #${i}` });
-    }
+    this.docs$ = store.select(fromAuth.selectDocs);
+  }
+
+  onSelectDoc(doc: any) {
+    const name = prompt('Update todo name', doc.name);
+    if (name !== null) {
+      this.store.dispatch(
+        new PouchActions.UpdateOne({
+          ...doc,
+          name
+        })
+      );
+   }
   }
 
   onLogout() {

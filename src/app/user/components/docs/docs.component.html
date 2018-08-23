@@ -1,0 +1,6 @@
+<div class="list-group">
+  <a *ngFor="let doc of docs" class="list-group-item list-group-item-action" (click)="onSelect(doc)">
+    <p class="mb-1">{{ doc.name }}</p>
+    <small>{{ doc.comment }}</small>
+  </a>
+</div>

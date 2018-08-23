@@ -26,9 +26,11 @@ export class AuthGuard implements CanLoad, CanActivate, CanActivateChild {
       map(token => {
         if (!token) {
           const auth = this.localStorageService.getItem(AUTH_KEY);
-          if (auth && auth.token) {
+          if (auth && auth.loginResponse) {
             // try to use stored token
-            this.store.dispatch(new AuthActions.LoginUserSuccess(auth.token));
+            this.store.dispatch(
+              new AuthActions.LoginUserSuccess(auth.loginResponse)
+            );
             return true;
           } else {
             // no token
